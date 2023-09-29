@@ -1,5 +1,5 @@
 import customtkinter
-
+import database
 
 customtkinter.set_appearance_mode('dark')
 customtkinter.set_default_color_theme('dark-blue')
@@ -8,7 +8,7 @@ janela = customtkinter.CTk()
 janela.geometry('500x300')
 
 def clique():
-    print('Fazer Login')
+    print('Conexão Feita com Sucesso')
 
 texto = customtkinter.CTkLabel(janela, text='Tela de Login', height=40, width=40)
 texto.pack(padx=10, pady=10)
