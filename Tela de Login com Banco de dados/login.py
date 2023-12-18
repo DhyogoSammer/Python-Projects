@@ -1,25 +1,40 @@
-from sqlite3 import Error 
-import sqlite3
+import mysql.connector
+from mysql.connector import Error 
 from tkinter import *
 from tkinter import Tk 
-import Bancodedados 
 
 
 
 
 def entre():
-    if login_e.get() != "":
-        log = login_e.get()
-        sen = senha_e.get()
-        print('Dados gravados')
-        vquery = "INSERT INTO dados (nome,senha) VALUES ('"+log+"','"+sen+"');"
-        Bancodedados.dml(vquery)
-        login_e.delete(0,END)
-        senha_e.delete(0,END)
+    try : 
+        if login_e.get() != "":
+            log = login_e.get()
+            sen = senha_e.get()
+            con = mysql.connector.connect(host='localhost',database='teste',user='root',password='')
 
-    else : 
-        print('ERROR')
-   
+            if con.is_connected():
+                db_info = con.get_server_info()
+                print('CONEXÃO AO SERVIDOR REALIZADA COM SUCESSO')
+                vquery = f"""INSERT INTO login (usuario,senha) VALUES ('{log}','{sen}');"""
+                cursor = con.cursor()
+                cursor.execute(vquery)
+                con.commit()
+                print('DADOS GRAVADOS COM SUCESSO')  
+ 
+
+    except Error as ex :
+            print(ex)
+    
+    finally : 
+            if con.is_connected():
+                cursor.close()
+                con.close()
+                print('CONEXÃO FINALIZADA COM SUCESSO')
+                login_e.delete(0,END)
+                senha_e.delete(0,END) 
+
+    
     janela2 = Toplevel()
     janela2.title('Login Feito')
     janela2.geometry('500x500')
@@ -27,8 +42,6 @@ def entre():
     janela2.resizable(False,False)
     msg = Label(janela2,text='Login feito com sucesso', font='Times 26 bold italic', bg='#005f6b',fg='#00dffc')
     msg.pack()
-
-
 
 
     
